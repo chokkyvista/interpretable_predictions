@@ -41,6 +41,7 @@ def build_model(model_type, vocab, cfg=None):
         lambda_init = cfg["lambda_init"]
         lambda_min = cfg["lambda_min"]
         lambda_max = cfg["lambda_max"]
+        async_lambda = cfg["async_lambda"]
         return LatentRationaleModel(
             vocab_size=vocab_size, emb_size=emb_size, hidden_size=hidden_size,
             output_size=output_size, vocab=vocab, dropout=dropout,
@@ -48,6 +49,7 @@ def build_model(model_type, vocab, cfg=None):
             selection=selection, lasso=lasso,
             lagrange_alpha=lagrange_alpha, lagrange_lr=lagrange_lr,
             lambda_init=lambda_init,
-            lambda_min=lambda_min, lambda_max=lambda_max)
+            lambda_min=lambda_min, lambda_max=lambda_max,
+            async_lambda=async_lambda)
     else:
         raise ValueError("Unknown model")

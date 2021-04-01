@@ -323,6 +323,11 @@ def get_args():
                         help="learning rate for lagrange")
     parser.add_argument('--lagrange_alpha', type=float, default=0.5,
                         help="alpha for computing the running average")
+    parser.add_argument('--sync_lambda', action='store_false',
+                        dest='async_lambda',
+                        help="do not update lambda during the forward pass, "
+                             "instead synchronize the update with the gradient "
+                             "step")
 
     # model / layer
     parser.add_argument('--layer', choices=["lstm", "rcnn"], default="rcnn")

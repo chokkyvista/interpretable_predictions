@@ -150,11 +150,18 @@ def train():
             assert pad_idx == 1, "pad idx"
             loss, loss_optional = model.get_loss(output, targets, mask=mask)
 
+            # update model parameters
             model.zero_grad()
             loss.backward()
             torch.nn.utils.clip_grad_norm_(model.parameters(),
                                            max_norm=cfg["max_grad_norm"])
             optimizer.step()
+
+            # update lagrange multiplier
+            if not model.async_lambda:
+                model.update_lambda(0, loss_optional["c0"])
+                model.update_lambda(1, loss_optional["c1"])
+
             iter_i += 1
 
             # print info

@@ -45,6 +45,7 @@ class LatentRationaleModel(nn.Module):
                  lambda_init:    float = 0.0015,
                  lambda_min:     float = 1e-12,
                  lambda_max:     float = 5.,
+                 async_lambda:   bool = True,
                  ):
 
         super(LatentRationaleModel, self).__init__()
@@ -63,6 +64,7 @@ class LatentRationaleModel(nn.Module):
         self.lambda_init = lambda_init
         self.lambda_min = lambda_min
         self.lambda_max = lambda_max
+        self.async_lambda = async_lambda
 
         self.z_rnn_size = z_rnn_size
         self.dependent_z = dependent_z
@@ -190,7 +192,7 @@ class LatentRationaleModel(nn.Module):
         c0 = c0_hat + (c0_ma.detach() - c0_hat.detach())
 
         # update lambda
-        if self.training:
+        if self.training and self.async_lambda:
             self.update_lambda(0, c0.item())
 
         with torch.no_grad():
@@ -234,7 +236,7 @@ class LatentRationaleModel(nn.Module):
         c1 = c1_hat + (c1_ma.detach() - c1_hat.detach())
 
         # update lambda
-        if self.training:
+        if self.training and self.async_lambda:
             self.update_lambda(1, c1.item())
 
         with torch.no_grad():
